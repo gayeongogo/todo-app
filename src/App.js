@@ -37,11 +37,24 @@ const App = () => {
     [todos],
   )
 
+  const onRemove = useCallback(
+    id => {
+      setTodos(todos.filter(todo => todo.id !== id))//선택한 아이디와 값이 다른것만 빼서 새로운 배열을 만듦 -> 클릭한 항목은 사라지고 다른 항목들만 남음
+    },[todos]
+  )
+  
+  const onToggle = useCallback(
+    id => {
+      setTodos(
+        todos.map(todo => todo.id === id ? {...todo, checked: !todo.checked} : todo)//클릭한 todo id 값이 같을 때 체크상태를 반전시킴, 다를 때는 todo 실행->id 값이 다를 떄는 변화를 주지 않고 처음 상태 그대로(나머지는 유지하면서 클릭한 todolist의 상태만 변하게 함)
+      )
+    },[todos]
+  )
 
   return (
     <TodoTemplate>
-      <TodoInsert onInsert={onInsert}/>
-      <TodoList todos={todos}/>
+      <TodoInsert onInsert={onInsert} />
+      <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle}/>
     </TodoTemplate>
   );
 };
